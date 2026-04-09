@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 
 from langchain.agents import create_agent
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_ollama import ChatOllama
 from langchain_tools import parse_langchain_agent_response
 
 load_dotenv()
@@ -18,7 +18,7 @@ def get_date():
     now = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
     return now
 
-llm = ChatGoogleGenerativeAI(model="gemini-3-flash-preview")
+llm = ChatOllama(model="qwen2.5:3b")
 
 system_prompt="""
 You are a helpful assistant.
@@ -33,8 +33,10 @@ user_query = user_query.lower()
 agent_input = {"messages": [{"role":"user", "content": user_query}]}
 
 result = agent.invoke(agent_input)
-parsed = parse_langchain_agent_response(result)
 
+#print(result)
+
+parsed = parse_langchain_agent_response(result)
 print(parsed["final_answer"])
 print(parsed["tool_calls"])
 print(parsed["tool_outputs"])
